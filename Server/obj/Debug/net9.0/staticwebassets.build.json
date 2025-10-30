@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "OScAX7kRDqon8tI5IqhuMJ31vxsWGpLlTrMW2e8Enzc=",
+  "Source": "Cozy_Chatter",
+  "BasePath": "_content/Cozy_Chatter",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

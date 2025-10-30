@@ -1,0 +1,44 @@
+﻿using Cozy_Chatter.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Cozy_Chatter.Repositories
+{
+    public class ChatterContext : DbContext
+    {
+        public DbSet<AllowedEmoji> AllowedEmojis { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
+        public DbSet<Emoji> Emojis { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessagePin> MessagePins { get; set; }
+        public DbSet<Pfpicture> Pfpictures { get; set; }
+        public DbSet<SMPost> SMPosts { get; set; }
+        public DbSet<SMPostLike> SMPostLikes { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserReaction> UserReactions { get; set; }
+
+        public ChatterContext() 
+        {
+            //Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //Настроить сертификат сервера позже
+            optionsBuilder.UseSqlServer("Server=ANDREY_PC\\SQLEXPRESS;Database=chatter;User Id=ccAdmin;Password=cozyAdmin9357;TrustServerCertificate=True;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<AllowedEmoji>().HasKey(emj => new { emj.PostId, emj.EmojiId });
+            builder.Entity<ChatUser>().HasKey(ch => new { ch.ChatId, ch.UserId });
+            builder.Entity<MessagePin>().HasKey(mes => new { mes.MessageId, mes.UserId });
+            builder.Entity<Pfpicture>().HasKey(pfp => new { pfp.UserId, pfp.PictureId });
+            builder.Entity<SMPostLike>().HasKey(pl => new { pl.UserId, pl.PostId });
+            builder.Entity<Subscription>().HasKey(sub => new { sub.UserId, sub.FollowerId });
+            builder.Entity<UserReaction>().HasKey(rct => new { rct.UserId, rct.PostId });
+        }
+    }
+}
