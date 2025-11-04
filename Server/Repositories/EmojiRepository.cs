@@ -1,21 +1,19 @@
-﻿using Cozy_Chatter.DTOs;
-using Cozy_Chatter.Models;
+﻿using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class EmojiRepository
+    public class EmojiRepository(ChatterContext context)
     {
-        public static async Task<List<UserReaction>?> GetReactionsByPostId(int id)
+        private readonly ChatterContext _context = context;
+        public async Task<List<UserReaction>?> GetReactionsByPostId(int id)
         {
-            using var context = new ChatterContext();
-            return await context.UserReactions.Where(ur => ur.PostId == id).ToListAsync();
+            return await _context.UserReactions.Where(ur => ur.PostId == id).ToListAsync();
         }
 
-        public static async Task<List<Emoji>?> GetAllEmojis()
+        public async Task<List<Emoji>?> GetAllEmojis()
         {
-            using var context = new ChatterContext();
-            return await context.Emojis.ToListAsync();
+            return await _context.Emojis.ToListAsync();
         }
     }
 }

@@ -3,27 +3,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class UserRepository
+    public class UserRepository(ChatterContext context)
     {
-        public static async Task<User?> GetUserById(int id)
+        private readonly ChatterContext _context = context;
+        public async Task<User?> GetUserById(int id)
         {
-            using var context = new ChatterContext();
-            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public static async Task<List<User>?> GetSubscribersByUserId(int id)
+        public async Task<List<User>?> GetSubscribersByUserId(int id)
         {
-            using var context = new ChatterContext();
-            var subscribersIds = context.Subscriptions
+            var subscribersIds = _context.Subscriptions
                 .Where(s => s.UserId == id)
                 .Select(s => s.FollowerId);
-            return await context.Users.Where(u => subscribersIds.Contains(u.Id)).ToListAsync();
+            return await _context.Users.Where(u => subscribersIds.Contains(u.Id)).ToListAsync();
         }
 
-        public static async Task<List<int>?> GetProfilePicturesByUserId(int id)
+        public async Task<List<int>?> GetProfilePicturesByUserId(int id)
         {
-            using var context = new ChatterContext();
-            return await context.Pfpictures
+            return await _context.Pfpictures
                 .Where(pfp => pfp.UserId == id)
                 .Select(pfp => pfp.PictureId)
                 .ToListAsync();

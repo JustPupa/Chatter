@@ -3,32 +3,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class ChatRepository
+    public class ChatRepository(ChatterContext context)
     {
-        public static async Task<List<Chat>?> GetChatsByUserId(int id)
+        private readonly ChatterContext _context = context;
+        public async Task<List<Chat>?> GetChatsByUserId(int id)
         {
-            using var context = new ChatterContext();
-            var chatsIds = context.ChatUsers.Where(cu => cu.UserId == id).Select(cu => cu.ChatId);
-            return await context.Chats.Where(c => chatsIds.Contains(c.Id)).ToListAsync();
+            var chatsIds = _context.ChatUsers.Where(cu => cu.UserId == id).Select(cu => cu.ChatId);
+            return await _context.Chats.Where(c => chatsIds.Contains(c.Id)).ToListAsync();
         }
 
-        public static async Task<List<User>?> GetUsersByChatId(int id)
+        public async Task<List<User>?> GetUsersByChatId(int id)
         {
-            using var context = new ChatterContext();
-            var usersIds = context.ChatUsers.Where(cu => cu.ChatId == id).Select(cu => cu.UserId);
-            return await context.Users.Where(u => usersIds.Contains(u.Id)).ToListAsync();
+            var usersIds = _context.ChatUsers.Where(cu => cu.ChatId == id).Select(cu => cu.UserId);
+            return await _context.Users.Where(u => usersIds.Contains(u.Id)).ToListAsync();
         }
 
-        public static async Task<List<Message>?> GetMessagesByChatId(int id)
+        public async Task<List<Message>?> GetMessagesByChatId(int id)
         {
-            using var context = new ChatterContext();
-            return await context.Messages.Where(m => m.ChatId == id).ToListAsync();
+            return await _context.Messages.Where(m => m.ChatId == id).ToListAsync();
         }
 
-        public static async Task<List<Message>?> GetChatPinnedMessages(int chatId)
+        public async Task<List<Message>?> GetChatPinnedMessages(int chatId)
         {
-            using var context = new ChatterContext();
-            return await context.Messages
+            return await _context.Messages
                 .Where(m => m.ChatId == chatId && m.IsPublic == true)
                 .ToListAsync();
         }

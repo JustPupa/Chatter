@@ -5,13 +5,15 @@ namespace Cozy_Chatter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmojiController : ControllerBase
+    public class EmojiController(EmojiRepository emojiRepository) : ControllerBase
     {
+        private readonly EmojiRepository _emojiRepository = emojiRepository;
+
         //Get list of all emojis
         [HttpGet]
         public async Task<IActionResult> GetEmojis()
         {
-            var emojis = await EmojiRepository.GetAllEmojis();
+            var emojis = await _emojiRepository.GetAllEmojis();
             return emojis == null ?
                 BadRequest("Emojis cannot be loaded") : Ok(emojis);
         }

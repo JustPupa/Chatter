@@ -24,12 +24,6 @@ namespace Cozy_Chatter.Repositories
             //Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //Настроить сертификат сервера позже
-            optionsBuilder.UseSqlServer("Server=ANDREY_PC\\SQLEXPRESS;Database=chatter;User Id=ccAdmin;Password=cozyAdmin9357;TrustServerCertificate=True;");
-        }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<AllowedEmoji>().HasKey(emj => new { emj.PostId, emj.EmojiId });
@@ -39,6 +33,17 @@ namespace Cozy_Chatter.Repositories
             builder.Entity<SMPostLike>().HasKey(pl => new { pl.UserId, pl.PostId });
             builder.Entity<Subscription>().HasKey(sub => new { sub.UserId, sub.FollowerId });
             builder.Entity<UserReaction>().HasKey(rct => new { rct.UserId, rct.PostId });
+
+            builder.Entity<SMPost>(entity =>
+            {
+                entity.HasOne(p => p.Publisher)
+                      .WithMany()
+                      .HasForeignKey(p => p.UserId);
+
+                entity.HasOne(p => p.ReferencePost)
+                      .WithMany()
+                      .HasForeignKey(p => p.Post_Ref);
+            });
         }
     }
 }

@@ -1,36 +1,39 @@
-﻿using Cozy_Chatter.DTOs;
-using Cozy_Chatter.Models;
+﻿using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class SMPostRepository
+    public class SMPostRepository(ChatterContext context)
     {
-        public static async Task<SMPost?> GetPostById(int id)
+        private readonly ChatterContext _context = context;
+
+        public async Task<SMPost?> GetPostById(int id)
         {
-            using var context = new ChatterContext();
-            return await context.SMPosts.FirstOrDefaultAsync(smp => smp.Id == id);
+            return await _context.SMPosts.FirstOrDefaultAsync(smp => smp.Id == id);
         }
 
-        public static async Task<List<SMPostFull>?> GetDetailedPostsByUserId(int id)
+        public async Task<List<SMPost>?> GetDetailedPostsByUserId(int id)
         {
-            using var context = new ChatterContext();
-            var postsShort = context.SMPosts.Where(p => p.UserId == id);
-            return await postsShort.Select(ps => SMPost.ToDetailed(ps)).ToListAsync();
+            var postsShort = _context.SMPosts.Where(p => p.UserId == id);
+            return await postsShort
+                .Include(ps => ps.Publisher)
+                .Include(ps => ps.ReferencePost)
+                .ToListAsync(); 
         } 
 
         //Select only TOP 100
-        public static async Task<List<SMPostFull>?> GetDetailedLatestPosts()
+        public async Task<List<SMPost>?> GetDetailedLatestPosts()
         {
-            using var context = new ChatterContext();
-            var postsShort = context.SMPosts.OrderByDescending(p => p.Pub_time).Take(100);
-            return await postsShort.Select(ps => SMPost.ToDetailed(ps)).ToListAsync();
+            var postsShort = _context.SMPosts.OrderByDescending(p => p.Pub_time).Take(100);
+            return await postsShort
+                .Include(ps => ps.Publisher)
+                .Include(ps => ps.ReferencePost)
+                .ToListAsync();
         }
 
-        public static async Task<List<SMPostLike>?> GetLikesByPostId(int id)
+        public async Task<List<SMPostLike>?> GetLikesByPostId(int id)
         {
-            using var context = new ChatterContext();
-            return await context.SMPostLikes.Where(pl => pl.PostId == id).ToListAsync();
+            return await _context.SMPostLikes.Where(pl => pl.PostId == id).ToListAsync();
         }
     }
 }
