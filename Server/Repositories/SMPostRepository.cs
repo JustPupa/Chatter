@@ -12,7 +12,7 @@ namespace Cozy_Chatter.Repositories
             return await _context.SMPosts.FirstOrDefaultAsync(smp => smp.Id == id);
         }
 
-        public async Task<List<SMPost>?> GetDetailedPostsByUserId(int id)
+        public async Task<List<SMPost>> GetDetailedPostsByUserId(int id)
         {
             var postsShort = _context.SMPosts.Where(p => p.UserId == id);
             return await postsShort
@@ -22,7 +22,7 @@ namespace Cozy_Chatter.Repositories
         } 
 
         //Select only TOP 100
-        public async Task<List<SMPost>?> GetDetailedLatestPosts()
+        public async Task<List<SMPost>> GetDetailedLatestPosts()
         {
             var postsShort = _context.SMPosts.OrderByDescending(p => p.Pub_time).Take(100);
             return await postsShort
@@ -31,7 +31,7 @@ namespace Cozy_Chatter.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<SMPostLike>?> GetLikesByPostId(int id)
+        public async Task<List<SMPostLike>> GetLikesByPostId(int id)
         {
             return await _context.SMPostLikes.Where(pl => pl.PostId == id).ToListAsync();
         }

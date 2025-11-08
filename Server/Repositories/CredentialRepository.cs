@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Cozy_Chatter.Repositories
+{
+    public class CredentialRepository(ChatterContext context)
+    {
+        private readonly ChatterContext _context = context;
+        public async Task<bool> CheckCredentialsExist(string login, string password)
+        {
+            return await _context.Credentials
+                .AnyAsync(cr => cr.Login == login && cr.Password == password);
+        }
+    }
+}

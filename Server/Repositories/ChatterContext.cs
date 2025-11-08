@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class ChatterContext : DbContext
+    public class ChatterContext(DbContextOptions<ChatterContext> options) : DbContext(options)
     {
         public DbSet<AllowedEmoji> AllowedEmojis { get; set; }
         public DbSet<Chat> Chats { get; set; }
@@ -18,11 +18,6 @@ namespace Cozy_Chatter.Repositories
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserReaction> UserReactions { get; set; }
-
-        public ChatterContext() 
-        {
-            //Database.EnsureCreated();
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -22,7 +22,7 @@ export const getPostsByUserId = async (userid) => {
 
 export const getReactionsByPostId = async (postid) => {
     try {
-        const response = await axios.get(`https://localhost:7052/api/SMPost/${postid}/reactions`)
+        const response = await axios.get(`https://localhost:7052/api/Emoji/${postid}/reactions`)
         console.log("Post reactions:");
         console.log(response.data);
     } catch(e) {

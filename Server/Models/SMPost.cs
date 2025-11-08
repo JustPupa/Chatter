@@ -1,5 +1,4 @@
-﻿using Cozy_Chatter.DTOs;
-using Cozy_Chatter.Repositories;
+﻿using Cozy_Chatter.Repositories;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

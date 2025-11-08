@@ -11,22 +11,23 @@ namespace Cozy_Chatter
             builder.Services.AddControllers();
 
             builder.Services.AddDbContext<ChatterContext>(options =>
-                options.UseSqlServer("Server=ANDREY_PC\\\\SQLEXPRESS;Database=chatter;User Id=ccAdmin;Password=cozyAdmin9357;TrustServerCertificate=True;"));
+                options.UseSqlServer("Server=ANDREY_PC\\SQLEXPRESS;Database=chatter;User Id=ccAdmin;Password=cozyAdmin9357;TrustServerCertificate=True;"));
 
             builder.Services.AddScoped<SMPostRepository>();
             builder.Services.AddScoped<ChatRepository>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<EmojiRepository>();
 
-            //builder.Services.AddCors(option =>
-            //{
-            //    option.AddDefaultPolicy(policy =>
-            //    {
-            //        policy.WithOrigins("http://localhost:5173");
-            //        policy.AllowAnyHeader();
-            //        policy.AllowAnyMethod();
-            //    });
-            //});
+
+            builder.Services.AddCors(option =>
+            {
+                option.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173");
+                    policy.AllowAnyHeader();
+                    policy.AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddOpenApi();
             var app = builder.Build();
@@ -35,9 +36,12 @@ namespace Cozy_Chatter
                 app.MapOpenApi();
             }
             app.UseHttpsRedirection();
-            app.UseAuthorization();
-            app.MapControllers();
+
             app.UseCors();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
             app.Run();
         }
     }

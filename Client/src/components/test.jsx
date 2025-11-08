@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../styles/App.css'
+import '../styles/test.css'
 import { 
   getLatestPosts,
   getPostsByUserId,
@@ -14,7 +14,7 @@ import {
   getPinnedMessagesByChatId
 } from '../services/requests'
 
-function App() {
+function Test() {
   const [userIdForPosts, setUserIdForPosts] = useState(1);
   const [postIdForReactions, setPostIdForReactions] = useState(2);
   const [postIdForLikes, setPostIdForLikes] = useState(3);
@@ -111,4 +111,4 @@ function App() {
   )
 }
 
-export default App
+export default Test

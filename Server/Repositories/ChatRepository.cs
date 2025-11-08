@@ -6,24 +6,29 @@ namespace Cozy_Chatter.Repositories
     public class ChatRepository(ChatterContext context)
     {
         private readonly ChatterContext _context = context;
-        public async Task<List<Chat>?> GetChatsByUserId(int id)
+
+        public async Task<Chat?> GetChatsById(int id)
         {
-            var chatsIds = _context.ChatUsers.Where(cu => cu.UserId == id).Select(cu => cu.ChatId);
+            return await _context.Chats.FirstOrDefaultAsync(c => c.Id == id);
+        }
+        public async Task<List<Chat>> GetChatsByUserId(int userId)
+        {
+            var chatsIds = _context.ChatUsers.Where(cu => cu.UserId == userId).Select(cu => cu.ChatId);
             return await _context.Chats.Where(c => chatsIds.Contains(c.Id)).ToListAsync();
         }
 
-        public async Task<List<User>?> GetUsersByChatId(int id)
+        public async Task<List<User>> GetUsersByChatId(int chatId)
         {
-            var usersIds = _context.ChatUsers.Where(cu => cu.ChatId == id).Select(cu => cu.UserId);
+            var usersIds = _context.ChatUsers.Where(cu => cu.ChatId == chatId).Select(cu => cu.UserId);
             return await _context.Users.Where(u => usersIds.Contains(u.Id)).ToListAsync();
         }
 
-        public async Task<List<Message>?> GetMessagesByChatId(int id)
+        public async Task<List<Message>> GetMessagesByChatId(int id)
         {
             return await _context.Messages.Where(m => m.ChatId == id).ToListAsync();
         }
 
-        public async Task<List<Message>?> GetChatPinnedMessages(int chatId)
+        public async Task<List<Message>> GetChatPinnedMessages(int chatId)
         {
             return await _context.Messages
                 .Where(m => m.ChatId == chatId && m.IsPublic == true)
