@@ -1,0 +1,48 @@
+name: Build and Deploy Chatter API + Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      Jwt__Key: ${{ secrets.JWT_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies (API)
+        working-directory: ./Backend
+        run: dotnet restore
+
+      - name: Build and publish API
+        working-directory: ./Backend
+        run: dotnet publish -c Release -o ./out
+
+      - name: Setup Node.js for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install frontend dependencies
+        working-directory: ./Frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: ./Frontend
+        run: npm run build
+
+      - name: Deploy to server
+        run: |
+          echo "Deploy step Ч настрой сам под свой сервер"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
