@@ -4,6 +4,7 @@ Server/**/[Dd]ebug/
 Server/**/[Rr]elease/
 Server/**/[Bb]uild[Ll]og.*
 Server/**/.vs/
+Server/appsettings.Development.json
 
 Client/node_modules
 Client/**/build

@@ -1,5 +1,4 @@
 ﻿using Cozy_Chatter.Repositories;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,8 +9,9 @@ namespace Cozy_Chatter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(CredentialRepository credentialRepository) : ControllerBase
+    public class AuthController(CredentialRepository credentialRepository, IConfiguration configuration) : ControllerBase
     {
+        private readonly IConfiguration _configuration = configuration;
         private readonly CredentialRepository _credentialRepository = credentialRepository;
 
         [HttpPost("login")]
@@ -19,7 +19,10 @@ namespace Cozy_Chatter.Controllers
         {
             if (_credentialRepository.CheckCredentialsExist(request.Login, request.Password).Result)
             {
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("HrnRMUe5YAhwGz5NVFdq3zbyb5klpzxl"));
+                var jwtKey = _configuration["Jwt:Key"]
+                     ?? Environment.GetEnvironmentVariable("Jwt__Key")
+                     ?? throw new Exception("JWT Key not configured");
+                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(

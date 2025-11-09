@@ -1,4 +1,4 @@
-name: Minimal Deploy JWT
+name: Deploy Chatter API
 
 on:
   push:
@@ -10,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       Jwt__Key: ${{ secrets.JWT_KEY }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show JWT environment variable
-        run: echo "JWT key is set (value hidden in logs)"
+      - name: Build and run API
+        run: |
+          dotnet restore ./Backend
+          dotnet build ./Backend

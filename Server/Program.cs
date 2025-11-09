@@ -14,13 +14,12 @@ namespace Cozy_Chatter
             builder.Services.AddControllers();
 
             //Key for JWT
-            var key = Encoding.ASCII.GetBytes("HrnRMUe5YAhwGz5NVFdq3zbyb5klpzxl");
+            var jwtKey = builder.Configuration["Jwt:Key"]
+             ?? Environment.GetEnvironmentVariable("Jwt__Key")
+             ?? throw new Exception("JWT Key not configured");
+            var key = Encoding.ASCII.GetBytes(jwtKey);
 
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
