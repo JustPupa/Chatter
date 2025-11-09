@@ -17,5 +17,5 @@ jobs:
 
       - name: Build and run API
         run: |
-          dotnet restore ./Backend
-          dotnet build ./Backend
+          dotnet restore ./Server
+          dotnet build ./Server
