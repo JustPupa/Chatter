@@ -36,7 +36,8 @@ namespace Cozy_Chatter
             builder.Services.AddAuthorization();
 
             builder.Services.AddDbContext<ChatterContext>(options =>
-                options.UseSqlServer("Server=ANDREY_PC\\SQLEXPRESS;Database=chatter;User Id=ccAdmin;Password=cozyAdmin9357;TrustServerCertificate=True;"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+                      ?? throw new Exception("Connection string not configured")));
 
             builder.Services.AddScoped<SMPostRepository>();
             builder.Services.AddScoped<ChatRepository>();

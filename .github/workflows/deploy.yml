@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       Jwt__Key: ${{ secrets.JWT_KEY }}
+      ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
 
     steps:
       - name: Checkout repository
