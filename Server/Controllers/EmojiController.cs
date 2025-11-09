@@ -1,4 +1,5 @@
 ﻿using Cozy_Chatter.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers

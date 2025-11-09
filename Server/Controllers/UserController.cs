@@ -1,8 +1,10 @@
 ﻿using Cozy_Chatter.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController(UserRepository userRepository) : ControllerBase
