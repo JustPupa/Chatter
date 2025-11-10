@@ -7,13 +7,13 @@ import Index from './index.jsx'
 import Login from './login/login.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/index" element={<Index />} />
-        <Route path="/account" element={<Index />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/index" element={<Index />} />
+          <Route path="/account" element={<Index />} />
+      </Routes>
   </BrowserRouter>
 )

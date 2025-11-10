@@ -1,4 +1,5 @@
 import { useState } from "react";
+import capyLogo from "../../assets/capy-logo.png";
 
 export default function Login() {
   const [login, setLogin] = useState("");
@@ -22,10 +23,15 @@ export default function Login() {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <input value={login} onChange={e => setLogin(e.target.value)} placeholder="Login" />
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
-      <button type="submit">Sign up</button>
-    </form>
+    <>
+      <form onSubmit={handleLogin}>
+        <input value={login} onChange={e => setLogin(e.target.value)} placeholder="Login" />
+        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
+        <button type="submit">Sign up</button>
+      </form>
+      <div>
+        Don't have an account yet? <a>Register</a>
+      </div>
+    </>
   );
 }

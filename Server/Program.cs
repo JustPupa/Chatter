@@ -14,8 +14,8 @@ namespace Cozy_Chatter
             builder.Services.AddControllers();
 
             //Key for JWT
-            var jwtKey = builder.Configuration["Jwt:Key"]
-             ?? Environment.GetEnvironmentVariable("Jwt__Key")
+            var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
+             ?? builder.Configuration["Jwt:Key"]
              ?? throw new Exception("JWT Key not configured");
             var key = Encoding.ASCII.GetBytes(jwtKey);
 
@@ -36,8 +36,12 @@ namespace Cozy_Chatter
             builder.Services.AddAuthorization();
 
             builder.Services.AddDbContext<ChatterContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-                      ?? throw new Exception("Connection string not configured")));
+                options.UseSqlServer(
+                    Environment.GetEnvironmentVariable("Jwt__Key")
+                    ??builder.Configuration.GetConnectionString("DefaultConnection")
+                    ?? throw new Exception("Connection string not configured")
+                )
+            );
 
             builder.Services.AddScoped<SMPostRepository>();
             builder.Services.AddScoped<ChatRepository>();
