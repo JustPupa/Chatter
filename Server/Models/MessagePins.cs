@@ -2,12 +2,12 @@
 
 namespace Cozy_Chatter.Models
 {
-    [Table("Message_Pins")]
+    [Table("message_pins")]
     public class MessagePin
     {
-        [Column("MessageId", Order = 1)]
+        [Column("message_id", Order = 1)]
         public int MessageId { get; set; }
-        [Column("UserId", Order = 2)]
+        [Column("user_id", Order = 2)]
         public int UserId { get; set; }
     }
 }

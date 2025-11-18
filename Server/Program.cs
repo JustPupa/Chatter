@@ -1,5 +1,6 @@
 using Cozy_Chatter.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -36,9 +37,9 @@ namespace Cozy_Chatter
             builder.Services.AddAuthorization();
 
             builder.Services.AddDbContext<ChatterContext>(options =>
-                options.UseSqlServer(
-                    Environment.GetEnvironmentVariable("Jwt__Key")
-                    ??builder.Configuration.GetConnectionString("DefaultConnection")
+                options.UseNpgsql(
+                    Environment.GetEnvironmentVariable("PG_CONNECTION_STRING")
+                    ?? builder.Configuration.GetConnectionString("DefaultConnection")
                     ?? throw new Exception("Connection string not configured")
                 )
             );

@@ -2,13 +2,14 @@
 
 namespace Cozy_Chatter.Models
 {
-    [Table("User_Reactions")]
+    [Table("user_reactions")]
     public class UserReaction
     {
-        [Column("UserId", Order = 1)]
+        [Column("User_id", Order = 1)]
         public int UserId { get; set; }
-        [Column("PostId", Order = 2)]
+        [Column("post_id", Order = 2)]
         public int PostId { get; set; }
+        [Column("emoji_id")]
         public int? EmojiId { get; set; }
     }
 }

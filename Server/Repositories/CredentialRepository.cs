@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cozy_Chatter.Hashing;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
@@ -7,8 +8,9 @@ namespace Cozy_Chatter.Repositories
         private readonly ChatterContext _context = context;
         public async Task<bool> CheckCredentialsExist(string login, string password)
         {
+            string hashedpass = PasswordHasher.HashPassword(password);
             return await _context.Credentials
-                .AnyAsync(cr => cr.Login == login && cr.Password == password);
+                .AnyAsync(cr => cr.Login == login && cr.Password == hashedpass);
         }
     }
 }

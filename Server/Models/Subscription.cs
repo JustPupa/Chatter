@@ -2,13 +2,14 @@
 
 namespace Cozy_Chatter.Models
 {
-    [Table("Subscriptions")]
+    [Table("subscriptions")]
     public class Subscription
     {
-        [Column("UserId", Order = 1)]
+        [Column("user_id", Order = 1)]
         public int UserId { get; set; }
-        [Column("FollowerId", Order = 2)]
+        [Column("follower_id", Order = 2)]
         public int FollowerId { get; set; }
+        [Column("date")]
         public DateTime? Date { get; set; }
     }
 }

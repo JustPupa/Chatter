@@ -2,12 +2,12 @@
 
 namespace Cozy_Chatter.Models
 {
-    [Table("Chat_Users")]
+    [Table("chat_users")]
     public class ChatUser
     {
-        [Column("ChatId", Order = 1)]
+        [Column("chat_id", Order = 1)]
         public int ChatId { get; set; }
-        [Column("UserId", Order = 2)]
+        [Column("user_id", Order = 2)]
         public int UserId { get; set; }
     }
 }

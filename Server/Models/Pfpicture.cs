@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cozy_Chatter.Models
 {
-    [Table("PfPics")]
+    [Table("pfpics")]
     public class Pfpicture
     {
-        [Column("UserId", Order = 1)]
+        [Column("user_id", Order = 1)]
         public int UserId { get; set; }
-        [Column("PictureId", Order = 2)]
+        [Column("picture_id", Order = 2)]
         public int PictureId { get; set; }
     }
 }
