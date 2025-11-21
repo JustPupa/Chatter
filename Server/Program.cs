@@ -55,9 +55,9 @@ namespace Cozy_Chatter
             {
                 option.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173");
-                    policy.AllowAnyHeader();
-                    policy.AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:5173")
+                          .WithMethods("GET", "POST", "PUT", "DELETE")
+                          .WithHeaders("Content-Type", "Authorization");
                 });
             });
 
