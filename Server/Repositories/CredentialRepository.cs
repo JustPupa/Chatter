@@ -8,9 +8,9 @@ namespace Cozy_Chatter.Repositories
         private readonly ChatterContext _context = context;
         public async Task<bool> CheckCredentialsExist(string login, string password)
         {
-            string hashedpass = PasswordHasher.HashPassword(password);
-            return await _context.Credentials
-                .AnyAsync(cr => cr.Login == login && cr.Password == hashedpass);
+            var salt = _context.Credentials.FirstOrDefault(cr => cr.Login == login)?.Salt;
+            string hashedpass = PasswordHasher.HashPassword(password, salt);
+            return await _context.Credentials.AnyAsync(cr => cr.Login == login && cr.Password == hashedpass);
         }
     }
 }

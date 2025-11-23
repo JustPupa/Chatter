@@ -39,6 +39,24 @@ namespace Cozy_Chatter.Repositories
                       .WithMany()
                       .HasForeignKey(p => p.Post_Ref);
             });
+
+            builder.Entity<ChatUser>(entity =>
+            {
+                entity.HasKey(cu => new { cu.ChatId, cu.UserId });
+
+                entity.HasOne(cu => cu.Chat)
+                      .WithMany(c => c.ChatUsers)
+                      .HasForeignKey(cu => cu.ChatId);
+
+                entity.HasOne(cu => cu.User)
+                      .WithMany(u => u.ChatUsers)
+                      .HasForeignKey(cu => cu.UserId);
+            });
+
+            builder.Entity<Chat>()
+                .HasMany(c => c.Users)
+                .WithMany(u => u.Chats)
+                .UsingEntity<ChatUser>();
         }
     }
 }

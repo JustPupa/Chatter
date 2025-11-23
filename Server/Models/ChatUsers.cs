@@ -9,5 +9,7 @@ namespace Cozy_Chatter.Models
         public int ChatId { get; set; }
         [Column("user_id", Order = 2)]
         public int UserId { get; set; }
+        public Chat Chat { get; set; } = new();
+        public User User { get; set; } = new();
     }
 }

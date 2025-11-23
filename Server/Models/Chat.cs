@@ -11,5 +11,7 @@ namespace Cozy_Chatter.Models
         public int Id { get; set; }
         [Column("name")]
         public string? Name { get; set; }
+        public ICollection<ChatUser> ChatUsers { get; set; } = [];
+        public ICollection<User> Users { get; set; } = [];
     }
 }

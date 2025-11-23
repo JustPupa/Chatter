@@ -1,5 +1,4 @@
-﻿using Cozy_Chatter.Repositories;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cozy_Chatter.Models
@@ -20,7 +19,7 @@ namespace Cozy_Chatter.Models
         public int? Post_Ref { get; set; }
         [Column("pub_time")]
         public DateTime? Pub_time { get; set; }
-        public User? Publisher { get; set; }
-        public SMPost? ReferencePost { get; set; }
+        public User Publisher { get; set; } = new();
+        public SMPost ReferencePost { get; set; } = new();
     }
 }

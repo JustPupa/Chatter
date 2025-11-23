@@ -13,14 +13,18 @@ namespace Cozy_Chatter.Repositories
         }
         public async Task<List<Chat>> GetChatsByUserId(int userId)
         {
-            var chatsIds = _context.ChatUsers.Where(cu => cu.UserId == userId).Select(cu => cu.ChatId);
-            return await _context.Chats.Where(c => chatsIds.Contains(c.Id)).ToListAsync();
+            return await _context.Chats
+                .Include(c => c.Users)
+                .Where(c => c.ChatUsers.Any(cu => cu.UserId == userId))
+                .ToListAsync();
         }
 
         public async Task<List<User>> GetUsersByChatId(int chatId)
         {
-            var usersIds = _context.ChatUsers.Where(cu => cu.ChatId == chatId).Select(cu => cu.UserId);
-            return await _context.Users.Where(u => usersIds.Contains(u.Id)).ToListAsync();
+            return await _context.Users
+                .Include(u => u.Chats)
+                .Where(u => u.ChatUsers.Any(cu => cu.ChatId == chatId))
+                .ToListAsync();
         }
 
         public async Task<List<Message>> GetMessagesByChatId(int id)
