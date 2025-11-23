@@ -15,9 +15,10 @@ namespace Cozy_Chatter.Controllers
         private readonly CredentialRepository _credentialRepository = credentialRepository;
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (_credentialRepository.CheckCredentialsExist(request.Login, request.Password).Result)
+            bool credentialsExist = await _credentialRepository.CheckCredentialsExist(request.Login, request.Password);
+            if (credentialsExist)
             {
                 var jwtKey = _configuration["Jwt:Key"]
                      ?? Environment.GetEnvironmentVariable("Jwt__Key")
@@ -40,6 +41,6 @@ namespace Cozy_Chatter.Controllers
             return Unauthorized(new { message = "Invalid credentials" });
         }
     }
-}
 
-public record LoginRequest(string Login, string Password);
+    public record LoginRequest(string Login, string Password);
+}
