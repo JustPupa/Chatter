@@ -1,7 +1,7 @@
+using Cozy_Chatter.Middleware;
 using Cozy_Chatter.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -12,9 +12,13 @@ namespace Cozy_Chatter
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                });
 
-            //Key for JWT
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
              ?? builder.Configuration["Jwt:Key"]
              ?? throw new Exception("JWT Key not configured");
@@ -50,7 +54,6 @@ namespace Cozy_Chatter
             builder.Services.AddScoped<EmojiRepository>();
             builder.Services.AddScoped<CredentialRepository>();
 
-
             builder.Services.AddCors(option =>
             {
                 option.AddDefaultPolicy(policy =>
@@ -65,9 +68,16 @@ namespace Cozy_Chatter
 
             var app = builder.Build();
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();

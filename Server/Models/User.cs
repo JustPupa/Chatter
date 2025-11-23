@@ -18,6 +18,5 @@ namespace Cozy_Chatter.Models
         [Column("birth_date")]
         public DateOnly? BirthDate { get; set; }
         public ICollection<ChatUser> ChatUsers { get; set; } = [];
-        public ICollection<Chat> Chats { get; set; } = [];
     }
 }

@@ -20,6 +20,6 @@ namespace Cozy_Chatter.Models
         [Column("pub_time")]
         public DateTime? Pub_time { get; set; }
         public User Publisher { get; set; } = new();
-        public SMPost ReferencePost { get; set; } = new();
+        public SMPost? ReferencePost { get; set; } = null;
     }
 }

@@ -14,16 +14,16 @@ namespace Cozy_Chatter.Repositories
         public async Task<List<Chat>> GetChatsByUserId(int userId)
         {
             return await _context.Chats
-                .Include(c => c.Users)
-                .Where(c => c.ChatUsers.Any(cu => cu.UserId == userId))
+                .Include(c => c.ChatUsers)
+                .Where(c => c.ChatUsers.Any(u => u.UserId == userId))
                 .ToListAsync();
         }
 
         public async Task<List<User>> GetUsersByChatId(int chatId)
         {
             return await _context.Users
-                .Include(u => u.Chats)
-                .Where(u => u.ChatUsers.Any(cu => cu.ChatId == chatId))
+                .Include(u => u.ChatUsers)
+                .Where(u => u.ChatUsers.Any(c => c.ChatId == chatId))
                 .ToListAsync();
         }
 

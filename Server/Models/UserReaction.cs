@@ -5,7 +5,7 @@ namespace Cozy_Chatter.Models
     [Table("user_reactions")]
     public class UserReaction
     {
-        [Column("User_id", Order = 1)]
+        [Column("user_id", Order = 1)]
         public int UserId { get; set; }
         [Column("post_id", Order = 2)]
         public int PostId { get; set; }
