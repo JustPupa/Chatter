@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Cozy_Chatter
 {
@@ -16,7 +17,7 @@ namespace Cozy_Chatter
                 .AddControllers()
                 .AddJsonOptions(options =>
                 {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 });
 
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
@@ -24,19 +25,20 @@ namespace Cozy_Chatter
              ?? throw new Exception("JWT Key not configured");
             var key = Encoding.ASCII.GetBytes(jwtKey);
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-            });
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+                });
 
             builder.Services.AddAuthorization();
 
@@ -48,11 +50,13 @@ namespace Cozy_Chatter
                 )
             );
 
-            builder.Services.AddScoped<SMPostRepository>();
             builder.Services.AddScoped<ChatRepository>();
-            builder.Services.AddScoped<UserRepository>();
-            builder.Services.AddScoped<EmojiRepository>();
             builder.Services.AddScoped<CredentialRepository>();
+            builder.Services.AddScoped<EmojiRepository>();
+            builder.Services.AddScoped<MessageRepository>();
+            builder.Services.AddScoped<ProfilePictureRepository>();
+            builder.Services.AddScoped<SMPostRepository>();
+            builder.Services.AddScoped<UserRepository>();
 
             builder.Services.AddCors(option =>
             {

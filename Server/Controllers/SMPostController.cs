@@ -1,16 +1,14 @@
-﻿using Cozy_Chatter.Repositories; 
+﻿using Cozy_Chatter.DTO;
+using Cozy_Chatter.Repositories; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SMPostController(SMPostRepository postRepository, UserRepository userRepository) : ControllerBase
+    public class SMPostController(SMPostRepository postRepository, UserRepository userRepository) : AbstractController
     {
         private readonly SMPostRepository _postRepository = postRepository;
         private readonly UserRepository _userRepository = userRepository;
 
-        //Get all posts
         [HttpGet("latest")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -21,34 +19,40 @@ namespace Cozy_Chatter.Controllers
             return Ok(latestPosts);
         }
 
-        //Get posts of a specific user
         [HttpGet("{userid}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetUserPosts(int userid)
+        public async Task<IActionResult> GetUserPosts(int userid, [FromQuery] PaginationRequest request)
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
             if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
-            var userPosts = await _postRepository.GetDetailedPostsByUserId(userid);
-            if (userPosts.Count == 0) return NoContent();
-            return Ok(userPosts);
+            return await GetPagedData(
+                request,
+                1,
+                50,
+                _postRepository,
+                await _postRepository.GetDetailedPostsByUserId(userid, request.PageNumber, request.PageSize)
+            );
         }
 
-        //Get social media post likes
         [HttpGet("{postid}/likes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetSMPostLikes(int postid)
+        public async Task<IActionResult> GetSMPostLikes(int postid, [FromQuery] PaginationRequest request)
         {
             if (postid <= 0) return BadRequest("Post ID must be a positive integer");
             if (await _postRepository.GetPostById(postid) == null) return NotFound("Post not found");
-            var likes = await _postRepository.GetLikesByPostId(postid);
-            if (likes.Count == 0) return NoContent();
-            return Ok(likes);
+            return await GetPagedData(
+                request,
+                10,
+                50,
+                _postRepository,
+                await _postRepository.GetLikesByPostId(postid, request.PageNumber, request.PageSize)
+            );
         }
     }
 }

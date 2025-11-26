@@ -1,25 +1,26 @@
-﻿using Cozy_Chatter.Repositories;
-using Microsoft.AspNetCore.Authorization;
+﻿using Cozy_Chatter.DTO;
+using Cozy_Chatter.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EmojiController(EmojiRepository emojiRepository, SMPostRepository postRepository) : ControllerBase
+    public class EmojiController(EmojiRepository emojiRepository, SMPostRepository postRepository) : AbstractController
     {
         private readonly EmojiRepository _emojiRepository = emojiRepository;
         private readonly SMPostRepository _postRepository = postRepository;
 
-        //Get list of all emojis
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetEmojis()
+        public async Task<IActionResult> GetEmojis([FromQuery] PaginationRequest request)
         {
-            var emojis = await _emojiRepository.GetAllEmojis();
-            if (emojis.Count == 0) return NoContent();
-            return Ok(emojis);
+            return await GetPagedData(
+                request,
+                40,
+                80,
+                _emojiRepository,
+                await _emojiRepository.GetPagedAsync(request.PageNumber, request.PageSize)
+            );
         }
 
         //Get social media post reactions
@@ -34,7 +35,7 @@ namespace Cozy_Chatter.Controllers
             if (await _postRepository.GetPostById(postid) == null) return NotFound("Post not found");
             var reactions = await _emojiRepository.GetReactionsByPostId(postid);
             if (reactions.Count == 0) return NoContent();
-            return Ok(reactions);
+            return Ok(reactions.GroupBy(r => r.EmojiId));
         }
     }
 }

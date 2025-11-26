@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../styles/test.css'
+import '../../styles/test.css'
 import { 
   getLatestPosts,
   getPostsByUserId,
@@ -12,15 +12,21 @@ import {
   getUsersByChatId,
   getMessagesByChatId,
   getPinnedMessagesByChatId
-} from '../services/requests'
+} from '../../services/requests'
 
 function Test() {
   const [userIdForPosts, setUserIdForPosts] = useState(1);
   const [postIdForReactions, setPostIdForReactions] = useState(2);
   const [postIdForLikes, setPostIdForLikes] = useState(3);
+  const [emojiPage, setEmojiPage] = useState(1);
+  const [emojiCount, setEmojiCount] = useState(10);
   const [userIdForSubscribers, setUserIdForSubscribers] = useState(1);
   const [userIdForPfpictures, setUserIdForPfpictures] = useState(2);
+
+  const [userChatsPage, setUserChatsPage] = useState(1);
+  const [userChatsCount, setUserChatsCount] = useState(15);
   const [userIdForChats, setUserIdForChats] = useState(2);
+
   const [chatIdForUsers, setChatIdForUsers] = useState(1);
   const [chatIdForMessages, setChatIdForMessages] = useState(1);
   const [chatIdForPinMessages, setChatIdForPinMessages] = useState(2);
@@ -57,8 +63,10 @@ function Test() {
         </p>
 
         <p>
-          Get Emoji list
-          <button onClick={() => getEmojis()}>
+          Get Emoji list (with page selection)
+          <input type="number" value={emojiPage} onChange={(e) => setEmojiPage(e.currentTarget.value)}></input>
+          <input type="number" value={emojiCount} onChange={(e) => setEmojiCount(e.currentTarget.value)}></input>
+          <button onClick={() => getEmojis(emojiPage, emojiCount)}>
             Execute
           </button>
         </p>
@@ -81,7 +89,9 @@ function Test() {
         <p>
           Get user chats
           <input type="number" value={userIdForChats} onChange={(e) => setUserIdForChats(e.currentTarget.value)}></input>
-          <button onClick={() => getChatsByUserId(userIdForChats)}>
+          <input type="number" value={userChatsPage} onChange={(e) => setUserChatsPage(e.currentTarget.value)}></input>
+          <input type="number" value={userChatsCount} onChange={(e) => setUserChatsCount(e.currentTarget.value)}></input>
+          <button onClick={() => getChatsByUserId(userIdForChats, userChatsPage, userChatsCount)}>
             Execute
           </button>
         </p>

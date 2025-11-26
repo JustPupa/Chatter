@@ -22,7 +22,7 @@ export const getPostsByUserId = async (userid) => {
 
 export const getReactionsByPostId = async (postid) => {
     try {
-        const response = await api.get(`/Emoji/${postid}/reactions`)
+        const response = await api.get(`/Emoji/${postid}/reactions`);
         console.log("Post reactions:");
         console.log(response.data);
     } catch(e) {
@@ -32,7 +32,7 @@ export const getReactionsByPostId = async (postid) => {
 
 export const getLikesByPostId = async (postid) => {
     try {
-        const response = await api.get(`/SMPost/${postid}/likes`)
+        const response = await api.get(`/SMPost/${postid}/likes`);
         console.log("Post likes:");
         console.log(response.data);
     } catch(e) {
@@ -40,9 +40,14 @@ export const getLikesByPostId = async (postid) => {
     }
 }
 
-export const getEmojis = async () => {
+export const getEmojis = async (emojisPage, emojisCount) => {
     try {
-        const response = await api.get("/Emoji")
+        const response = await api.get("/Emoji", {
+        params: {
+            pageNumber: emojisPage,
+            pageSize: emojisCount
+        }
+        });
         console.log("List of all emojis:");
         console.log(response.data);
     } catch(e) {
@@ -52,7 +57,7 @@ export const getEmojis = async () => {
 
 export const getSubscribersByUserId = async (userid) => {
     try {
-        const response = await api.get(`/User/${userid}/subscribers`)
+        const response = await api.get(`/User/${userid}/subscribers`);
         console.log("User subscribers:");
         console.log(response.data);
     } catch(e) {
@@ -62,7 +67,7 @@ export const getSubscribersByUserId = async (userid) => {
 
 export const getPfpicsByUserId = async (userid) => {
     try {
-        const response = await api.get(`/User/${userid}/pfpicture`)
+        const response = await api.get(`/ProfilePicture/${userid}/pfpictures`);
         console.log("User profile pictures links:");
         console.log(response.data);
     } catch(e) {
@@ -70,9 +75,14 @@ export const getPfpicsByUserId = async (userid) => {
     }
 }
 
-export const getChatsByUserId = async (userid) => {
+export const getChatsByUserId = async (userid, chatsPage, chatsCount) => {
     try {
-        const response = await api.get(`/Chat/${userid}/chats`)
+        const response = await api.get(`/Chat/${userid}/chats`, {
+        params: {
+            pageNumber: chatsPage,
+            pageSize: chatsCount
+        }
+        });
         console.log("User chats:");
         console.log(response.data);
     } catch(e) {
@@ -82,7 +92,7 @@ export const getChatsByUserId = async (userid) => {
 
 export const getUsersByChatId = async (chatid) => {
     try {
-        const response = await api.get(`/Chat/${chatid}/users`)
+        const response = await api.get(`/Chat/${chatid}/users`);
         console.log("Chat users:");
         console.log(response.data);
     } catch(e) {
@@ -92,7 +102,7 @@ export const getUsersByChatId = async (chatid) => {
 
 export const getMessagesByChatId = async (chatid) => {
     try {
-        const response = await api.get(`/Chat/${chatid}/messages`)
+        const response = await api.get(`/Message/${chatid}/messages`);
         console.log("Chat messages:");
         console.log(response.data);
     } catch(e) {
@@ -102,7 +112,7 @@ export const getMessagesByChatId = async (chatid) => {
 
 export const getPinnedMessagesByChatId = async (chatid) => {
     try {
-        const response = await api.get(`/Chat/${chatid}/pinnedmessages`)
+        const response = await api.get(`/Message/${chatid}/pinnedmessages`);
         console.log("Chat pinned messages:");
         console.log(response.data);
     } catch(e) {
