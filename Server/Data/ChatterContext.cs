@@ -1,7 +1,7 @@
 ﻿using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cozy_Chatter.Repositories
+namespace Cozy_Chatter.Data
 {
     public class ChatterContext(DbContextOptions<ChatterContext> options) : DbContext(options)
     {

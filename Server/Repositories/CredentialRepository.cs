@@ -1,4 +1,5 @@
-﻿using Cozy_Chatter.Hashing;
+﻿using Cozy_Chatter.Data;
+using Cozy_Chatter.Hashing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
@@ -11,7 +12,10 @@ namespace Cozy_Chatter.Repositories
         }
         public async Task<bool> CheckCredentialsExist(string login, string password)
         {
-            var salt = _context.Credentials.FirstOrDefault(cr => cr.Login == login)?.Salt;
+            var salt = await _context.Credentials
+                .Where(cr => cr.Login == login)
+                .Select(cr => cr.Salt)
+                .FirstOrDefaultAsync();
             string hashedpass = PasswordHasher.HashPassword(password, salt);
             return await _context.Credentials.AnyAsync(cr => cr.Login == login && cr.Password == hashedpass);
         }

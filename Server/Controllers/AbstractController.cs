@@ -12,7 +12,12 @@ namespace Cozy_Chatter.Controllers
             int minPageSize, int maxPageSize, T repository, List<K> data, int uniqueTotalCount = -1) where T : AbstractRepository
         {
             int pageNumber = request.PageNumber <= 0 ? 1 : request.PageNumber;
-            int pageSize = Math.Clamp(request.PageSize, minPageSize, maxPageSize);
+            int pageSize = request.PageSize switch
+            {
+                var x when x <= 0 => minPageSize,
+                var x when x > maxPageSize => maxPageSize,
+                _ => request.PageSize
+            };
             int totalItems = (uniqueTotalCount == -1) ? await repository.GetCountAsync() : uniqueTotalCount;
             if (data.Count == 0) return NoContent();
             return Ok(new

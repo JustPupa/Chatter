@@ -1,4 +1,5 @@
-﻿using Cozy_Chatter.Models;
+﻿using Cozy_Chatter.Data;
+using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories

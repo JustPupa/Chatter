@@ -1,3 +1,4 @@
+using Cozy_Chatter.Data;
 using Cozy_Chatter.Middleware;
 using Cozy_Chatter.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

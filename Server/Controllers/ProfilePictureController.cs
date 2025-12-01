@@ -19,7 +19,6 @@ namespace Cozy_Chatter.Controllers
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
             if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
-
             return await GetPagedData(
                 request,
                 1,

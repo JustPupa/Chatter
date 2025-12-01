@@ -1,4 +1,5 @@
-﻿using Cozy_Chatter.Models;
+﻿using Cozy_Chatter.Data;
+using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
@@ -19,7 +20,7 @@ namespace Cozy_Chatter.Repositories
             return await _context.Chats
                 .Include(c => c.ChatUsers)
                 .Where(c => c.ChatUsers.Any(u => u.UserId == userId))
-                .OrderBy(c => c.Id)
+                .OrderBy(c => c.Name)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -28,7 +29,6 @@ namespace Cozy_Chatter.Repositories
         public async Task<List<User>> GetUsersByChatId(int chatId, int pageNumber, int pageSize)
         {
             return await _context.Users
-                .Include(u => u.ChatUsers)
                 .Where(u => u.ChatUsers.Any(c => c.ChatId == chatId))
                 .OrderBy(u => u.Id)
                 .Skip((pageNumber - 1) * pageSize)
