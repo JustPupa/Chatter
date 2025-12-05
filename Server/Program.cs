@@ -1,6 +1,7 @@
 using Cozy_Chatter.Data;
 using Cozy_Chatter.Middleware;
 using Cozy_Chatter.Repositories;
+using Cozy_Chatter.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,10 +17,10 @@ namespace Cozy_Chatter
             var builder = WebApplication.CreateBuilder(args);
             builder.Services
                 .AddControllers()
-                .AddJsonOptions(options =>
-                {
+                .AddJsonOptions(options => {
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 });
+            builder.Services.AddSingleton<ITokenService, TokenService>();
 
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
              ?? builder.Configuration["Jwt:Key"]
@@ -61,11 +62,13 @@ namespace Cozy_Chatter
 
             builder.Services.AddCors(option =>
             {
-                option.AddDefaultPolicy(policy =>
+                option.AddPolicy("AllowClient", builder =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
-                          .WithMethods("GET", "POST", "PUT", "DELETE")
-                          .WithHeaders("Content-Type", "Authorization");
+                    builder
+                        .WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
@@ -80,14 +83,11 @@ namespace Cozy_Chatter
                 app.MapOpenApi();
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/error");
-            }
+            else app.UseExceptionHandler("/error");
 
             app.UseHttpsRedirection();
 
-            app.UseCors();
+            app.UseCors("AllowClient");
 
             app.UseAuthentication();
             app.UseAuthorization();

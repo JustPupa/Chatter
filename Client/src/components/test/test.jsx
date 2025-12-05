@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import '../../styles/test.css'
+import { useState } from 'react';
+import '../../styles/test.css';
 import { 
   getLatestPosts,
   getPostsByUserId,
@@ -12,7 +12,7 @@ import {
   getUsersByChatId,
   getMessagesByChatId,
   getPinnedMessagesByChatId
-} from '../../services/requests'
+} from '../../services/requests';
 
 function Test() {
   const [userIdForPosts, setUserIdForPosts] = useState(1);

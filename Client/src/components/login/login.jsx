@@ -1,37 +1,46 @@
 import { useState } from "react";
-import capyLogo from "../../assets/capy-logo.png";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../services/auth";
 
-export default function Login() {
-  const [login, setLogin] = useState("");
+const Login = () => {
+  const navigate = useNavigate();
+
+  const [userlogin, setUserlogin] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("https://localhost:7052/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ login, password }),
-    });
+    setError(null);
+    setLoading(true);
 
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-      alert("Login successful!");
-    } else {
-      alert(data.message);
+    try {
+      await login(userlogin, password);
+      navigate("/test");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid credentials");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <>
-      <form onSubmit={handleLogin}>
-        <input value={login} onChange={e => setLogin(e.target.value)} placeholder="Login" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
-        <button type="submit">Sign up</button>
+    <div>
+      <h1>Login page</h1>
+      <form onSubmit={handleSubmit}>
+        <label>Login</label>
+        <input value={userlogin} onChange={(e) => setUserlogin(e.target.value)}/>
+        <label>Password</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+        {error && <p>{error}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Log in"}
+        </button>
       </form>
-      <div>
-        Don't have an account yet? <a>Register</a>
-      </div>
-    </>
+    </div>
   );
-}
+};
+
+export default Login;

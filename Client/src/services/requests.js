@@ -1,4 +1,4 @@
-import api from "./api";
+import { api } from "./api";
 
 export const getLatestPosts = async () => {
     try {
@@ -58,10 +58,10 @@ export const getLikesByPostId = async (postid, likesPage, likesCount) => {
 export const getEmojis = async (emojisPage, emojisCount) => {
     try {
         const response = await api.get("/Emoji", {
-        params: {
-            pageNumber: emojisPage,
-            pageSize: emojisCount
-        }
+            params: {
+                pageNumber: emojisPage,
+                pageSize: emojisCount
+            }
         });
         console.log("List of all emojis:");
         console.log(response.data);
@@ -88,10 +88,10 @@ export const getSubscribersByUserId = async (userid, subscribersPage, subscriber
 export const getPfpicsByUserId = async (userid, pfpPage, pfpCount) => {
     try {
         const response = await api.get(`/ProfilePicture/${userid}/pfpictures`, {
-        params: {
-            pageNumber: pfpPage,
-            pageSize: pfpCount
-        }
+            params: {
+                pageNumber: pfpPage,
+                pageSize: pfpCount
+            }
         });
         console.log("User profile pictures links:");
         console.log(response.data);
@@ -103,10 +103,10 @@ export const getPfpicsByUserId = async (userid, pfpPage, pfpCount) => {
 export const getChatsByUserId = async (userid, chatsPage, chatsCount) => {
     try {
         const response = await api.get(`/Chat/${userid}/chats`, {
-        params: {
-            pageNumber: chatsPage,
-            pageSize: chatsCount
-        }
+            params: {
+                pageNumber: chatsPage,
+                pageSize: chatsCount
+            }
         });
         console.log("User chats:");
         console.log(response.data);

@@ -32,13 +32,18 @@ namespace Cozy_Chatter.Data
             builder.Entity<SMPost>(entity =>
             {
                 entity.HasOne(p => p.Publisher)
-                      .WithMany()
-                      .HasForeignKey(p => p.UserId);
+                    .WithMany()
+                    .HasForeignKey(p => p.UserId);
 
                 entity.HasOne(p => p.ReferencePost)
-                      .WithMany()
-                      .HasForeignKey(p => p.Post_Ref);
+                    .WithMany()
+                    .HasForeignKey(p => p.Post_Ref);
             });
+
+            builder.Entity<Credential>()
+                .HasOne(c => c.User)
+                .WithOne()
+                .HasForeignKey<Credential>(c => c.UserId);
 
             builder.Entity<Chat>()
                 .HasMany(c => c.ChatUsers)

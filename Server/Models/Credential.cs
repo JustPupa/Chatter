@@ -19,5 +19,6 @@ namespace Cozy_Chatter.Models
         public string? Email { get; set; }
         [Column("salt")]
         public byte[]? Salt { get; set; }
+        public User User { get; set; } = new();
     }
 }

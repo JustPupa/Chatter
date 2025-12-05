@@ -20,9 +20,9 @@ namespace Cozy_Chatter.Repositories
         {
             return await _context.SMPosts
                 .Where(p => p.UserId == id)
-                .OrderByDescending(p => p.Pub_time)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .OrderByDescending(p => p.Pub_time)
                 .Include(ps => ps.Publisher)
                 .Include(ps => ps.ReferencePost)
                 .ToListAsync();
@@ -45,6 +45,7 @@ namespace Cozy_Chatter.Repositories
                 .Where(pl => pl.PostId == id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .OrderBy(pl => pl.PostId)
                 .ToListAsync();
         }
     }
