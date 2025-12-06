@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class EmojiController(EmojiRepository emojiRepository, SMPostRepository postRepository) : AbstractController
+    public class EmojiController(IEmojiRepository emojiRepository, ISMPostRepository postRepository) : AbstractController
     {
-        private readonly EmojiRepository _emojiRepository = emojiRepository;
-        private readonly SMPostRepository _postRepository = postRepository;
+        private readonly IEmojiRepository _emojiRepository = emojiRepository;
+        private readonly ISMPostRepository _postRepository = postRepository;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class ProfilePictureController(ProfilePictureRepository pfpRepository,
-        UserRepository userRepository) : AbstractController
+    public class ProfilePictureController(IProfilePictureRepository pfpRepository,
+        IUserRepository userRepository) : AbstractController
     {
-        private readonly ProfilePictureRepository _pfpRepository = pfpRepository;
-        private readonly UserRepository _userRepository = userRepository;
+        private readonly IProfilePictureRepository _pfpRepository = pfpRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         [HttpGet("{userid}/pfpictures")]
         [ProducesResponseType(StatusCodes.Status200OK)]

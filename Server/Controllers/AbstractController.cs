@@ -9,7 +9,7 @@ namespace Cozy_Chatter.Controllers
     public abstract class AbstractController : ControllerBase
     {
         public async Task<IActionResult> GetPagedData<T, K>(PaginationRequest request, 
-            int minPageSize, int maxPageSize, T repository, List<K> data, int uniqueTotalCount = -1) where T : AbstractRepository
+            int minPageSize, int maxPageSize, T repository, List<K> data, int uniqueTotalCount = -1) where T : IRepository
         {
             int pageNumber = request.PageNumber <= 0 ? 1 : request.PageNumber;
             int pageSize = request.PageSize switch

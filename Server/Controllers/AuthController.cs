@@ -7,12 +7,12 @@ namespace Cozy_Chatter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(CredentialRepository credentialRepository,
-        ITokenService _tokenService, UserRepository userRepository) : ControllerBase
+    public class AuthController(ICredentialRepository credentialRepository,
+        ITokenService _tokenService, IUserRepository userRepository) : ControllerBase
     {
-        private readonly CredentialRepository _credentialRepository = credentialRepository;
+        private readonly ICredentialRepository _credentialRepository = credentialRepository;
         private readonly ITokenService _tokenService = _tokenService;
-        private readonly UserRepository _userRepository = userRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)

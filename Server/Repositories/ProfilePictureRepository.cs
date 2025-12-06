@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class ProfilePictureRepository(ChatterContext context) : AbstractRepository(context)
+    public class ProfilePictureRepository(ChatterContext context) : 
+        AbstractRepository(context), IProfilePictureRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -18,5 +19,10 @@ namespace Cozy_Chatter.Repositories
                 .Select(pfp => pfp.PictureId)
                 .ToListAsync();
         }
+    }
+
+    public interface IProfilePictureRepository : IRepository
+    {
+        Task<List<int>> GetProfilePicturesByUserId(int id, int pageNumber, int pageSize);
     }
 }

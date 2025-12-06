@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class SMPostController(SMPostRepository postRepository, UserRepository userRepository) : AbstractController
+    public class SMPostController(ISMPostRepository postRepository, IUserRepository userRepository) : AbstractController
     {
-        private readonly SMPostRepository _postRepository = postRepository;
-        private readonly UserRepository _userRepository = userRepository;
+        private readonly ISMPostRepository _postRepository = postRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         [HttpGet("latest")]
         [ProducesResponseType(StatusCodes.Status200OK)]

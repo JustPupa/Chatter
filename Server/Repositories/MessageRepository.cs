@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class MessageRepository(ChatterContext context) : AbstractRepository(context)
+    public class MessageRepository(ChatterContext context) : AbstractRepository(context), IMessageRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -44,5 +44,13 @@ namespace Cozy_Chatter.Repositories
                 .Take(pageSize)
                 .ToListAsync();
         }
+    }
+
+    public interface IMessageRepository : IRepository
+    {
+        Task<int> GetCountByChatAsync(int chatid);
+        Task<int> GetPinnedCountByChatAsync(int chatid);
+        Task<List<Message>> GetMessagesByChatId(int id, int pageNumber, int pageSize);
+        Task<List<Message>> GetChatPinnedMessages(int chatId, int pageNumber, int pageSize);
     }
 }

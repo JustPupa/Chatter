@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class ChatRepository(ChatterContext context) : AbstractRepository(context)
+    public class ChatRepository(ChatterContext context) : AbstractRepository(context), IChatRepository
     {
         public override async Task<int> GetCountAsync()
         {
             return await _context.Chats.CountAsync();
         }
-
         public async Task<Chat?> GetChatsById(int id)
         {
             return await _context.Chats.FirstOrDefaultAsync(c => c.Id == id);
@@ -25,7 +24,6 @@ namespace Cozy_Chatter.Repositories
                 .Take(pageSize)
                 .ToListAsync();
         }
-
         public async Task<List<User>> GetUsersByChatId(int chatId, int pageNumber, int pageSize)
         {
             return await _context.Users
@@ -35,5 +33,12 @@ namespace Cozy_Chatter.Repositories
                 .Take(pageSize)
                 .ToListAsync();
         }
+    }
+
+    public interface IChatRepository : IRepository
+    {
+        Task<Chat?> GetChatsById(int id);
+        Task<List<Chat>> GetChatsByUserId(int userId, int pageNumber, int pageSize);
+        Task<List<User>> GetUsersByChatId(int chatId, int pageNumber, int pageSize);
     }
 }

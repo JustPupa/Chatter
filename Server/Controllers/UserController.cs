@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cozy_Chatter.Controllers
 {
     [Authorize]
-    public class UserController(UserRepository userRepository) : AbstractController
+    public class UserController(IUserRepository userRepository) : AbstractController
     {
-        private readonly UserRepository _userRepository = userRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         //Get subscribers by user
         [HttpGet("{userid}/subscribers")]

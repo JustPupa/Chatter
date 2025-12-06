@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class SMPostRepository(ChatterContext context) : AbstractRepository(context)
+    public class SMPostRepository(ChatterContext context) : AbstractRepository(context), ISMPostRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -28,7 +28,6 @@ namespace Cozy_Chatter.Repositories
                 .ToListAsync();
         }
 
-        //Select only TOP 100
         public async Task<List<SMPost>> GetDetailedLatestPosts()
         {
             return await _context.SMPosts
@@ -48,5 +47,13 @@ namespace Cozy_Chatter.Repositories
                 .OrderBy(pl => pl.PostId)
                 .ToListAsync();
         }
+    }
+
+    public interface ISMPostRepository : IRepository
+    {
+        Task<SMPost?> GetPostById(int id);
+        Task<List<SMPost>> GetDetailedPostsByUserId(int id, int pageNumber, int pageSize);
+        Task<List<SMPost>> GetDetailedLatestPosts();
+        Task<List<SMPostLike>> GetLikesByPostId(int id, int pageNumber, int pageSize);
     }
 }

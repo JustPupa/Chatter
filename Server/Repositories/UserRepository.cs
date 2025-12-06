@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class UserRepository(ChatterContext context) : AbstractRepository(context)
+    public class UserRepository(ChatterContext context) : AbstractRepository(context), IUserRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -28,5 +28,11 @@ namespace Cozy_Chatter.Repositories
                 .Take(pageSize)
                 .ToListAsync();
         }
+    }
+
+    public interface IUserRepository : IRepository
+    {
+        Task<User?> GetUserById(int id);
+        Task<List<User>> GetSubscribersByUserId(int id, int pageNumber, int pageSize);
     }
 }

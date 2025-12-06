@@ -1,4 +1,5 @@
 ﻿using Cozy_Chatter.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ namespace Cozy_Chatter.Services
 {
     public interface ITokenService
     {
+        public SymmetricSecurityKey GenerageKey();
         public string GenerateAccessToken(User user);
         public string GenerateRefreshToken(User user);
         public ClaimsPrincipal? ValidateRefreshToken(string token);
@@ -20,10 +22,15 @@ namespace Cozy_Chatter.Services
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _key = GenerageKey();
+        }
+
+        public SymmetricSecurityKey GenerageKey()
+        {
             var jwtKey = _configuration["Jwt:Key"]
                  ?? Environment.GetEnvironmentVariable("Jwt__Key")
                  ?? throw new Exception("JWT Key not configured");
-            _key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
         }
 
         public string GenerateAccessToken(User user)

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class MessageController(MessageRepository messageRepository,
-        ChatRepository chatRepository) : AbstractController
+    public class MessageController(IMessageRepository messageRepository,
+        IChatRepository chatRepository) : AbstractController
     {
-        private readonly MessageRepository _messageRepository = messageRepository;
-        private readonly ChatRepository _chatRepository = chatRepository;
+        private readonly IMessageRepository _messageRepository = messageRepository;
+        private readonly IChatRepository _chatRepository = chatRepository;
 
         [HttpGet("{chatid}/messages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,7 +28,6 @@ namespace Cozy_Chatter.Controllers
             );
         }
 
-        //Get chat pinned messages
         [HttpGet("{chatid}/pinnedmessages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

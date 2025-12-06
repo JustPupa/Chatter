@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class ChatController(ChatRepository chatRepository, UserRepository userRepository) : AbstractController
+    public class ChatController(IChatRepository chatRepository, IUserRepository userRepository) : AbstractController
     {
-        private readonly ChatRepository _chatRepository = chatRepository;
-        private readonly UserRepository _userRepository = userRepository;
+        private readonly IChatRepository _chatRepository = chatRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         [HttpGet("{userid}/chats")]
         [ProducesResponseType(StatusCodes.Status200OK)]

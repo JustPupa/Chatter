@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class EmojiRepository(ChatterContext context) : AbstractRepository(context)
+    public class EmojiRepository(ChatterContext context) : AbstractRepository(context), IEmojiRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -29,5 +29,12 @@ namespace Cozy_Chatter.Repositories
         {
             return await _context.UserReactions.Where(ur => ur.PostId == id).ToListAsync();
         }
+    }
+
+    public interface IEmojiRepository : IRepository
+    {
+        Task<List<Emoji>> GetAllEmojis();
+        Task<List<Emoji>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<List<UserReaction>> GetReactionsByPostId(int id);
     }
 }

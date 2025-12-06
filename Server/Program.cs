@@ -4,6 +4,8 @@ using Cozy_Chatter.Repositories;
 using Cozy_Chatter.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -23,9 +25,8 @@ namespace Cozy_Chatter
             builder.Services.AddSingleton<ITokenService, TokenService>();
 
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
-             ?? builder.Configuration["Jwt:Key"]
-             ?? throw new Exception("JWT Key not configured");
-            var key = Encoding.ASCII.GetBytes(jwtKey);
+                ?? builder.Configuration["Jwt:Key"]
+                ?? throw new Exception("JWT Key not configured");
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -38,7 +39,7 @@ namespace Cozy_Chatter
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey))
                     };
                 });
 
@@ -52,13 +53,13 @@ namespace Cozy_Chatter
                 )
             );
 
-            builder.Services.AddScoped<ChatRepository>();
-            builder.Services.AddScoped<CredentialRepository>();
-            builder.Services.AddScoped<EmojiRepository>();
-            builder.Services.AddScoped<MessageRepository>();
-            builder.Services.AddScoped<ProfilePictureRepository>();
-            builder.Services.AddScoped<SMPostRepository>();
-            builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
+            builder.Services.AddScoped<ICredentialRepository, CredentialRepository>();
+            builder.Services.AddScoped<IEmojiRepository, EmojiRepository>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+            builder.Services.AddScoped<IProfilePictureRepository, ProfilePictureRepository>();
+            builder.Services.AddScoped<ISMPostRepository ,SMPostRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             builder.Services.AddCors(option =>
             {

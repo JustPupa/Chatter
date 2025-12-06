@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cozy_Chatter.Repositories
 {
-    public class CredentialRepository(ChatterContext context) : AbstractRepository(context)
+    public class CredentialRepository(ChatterContext context) : AbstractRepository(context), ICredentialRepository
     {
         public override async Task<int> GetCountAsync()
         {
@@ -31,5 +31,11 @@ namespace Cozy_Chatter.Repositories
                 .Select(cr => cr.User)
                 .FirstOrDefaultAsync();
         }
+    }
+
+    public interface ICredentialRepository : IRepository
+    {
+        Task<bool> CheckCredentialsExist(string login, string password);
+        Task<User?> ValidateUserAsync(string login, string password);
     }
 }
