@@ -3,7 +3,7 @@
 namespace Cozy_Chatter.Models
 {
     [Table("allowed_emojis")]
-    public class AllowedEmoji
+    public class AllowedEmoji : IEntity
     {
         [Column("post_id", Order = 1)]
         public int PostId { get; set; }

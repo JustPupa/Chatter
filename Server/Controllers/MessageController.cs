@@ -1,14 +1,12 @@
 ﻿using Cozy_Chatter.DTO;
-using Cozy_Chatter.Repositories;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class MessageController(IMessageRepository messageRepository,
-        IChatRepository chatRepository) : AbstractController
+    public class MessageController(IChatService chatService) : AbstractController
     {
-        private readonly IMessageRepository _messageRepository = messageRepository;
-        private readonly IChatRepository _chatRepository = chatRepository;
+        private readonly IChatService _chatService = chatService;
 
         [HttpGet("{chatid}/messages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -18,13 +16,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetMessagesByChat(int chatid, [FromQuery] PaginationRequest request)
         {
             if (chatid <= 0) return BadRequest("Chat ID must be a positive integer");
-            if (await _chatRepository.GetChatsById(chatid) == null) return NotFound("Chat not found");
+            if (await _chatService.GetChatsById(chatid) == null) return NotFound("Chat not found");
             return await GetPagedData(
                 request,
                 30,
                 200,
-                _messageRepository,
-                await _messageRepository.GetMessagesByChatId(chatid, request.PageNumber, request.PageSize)
+                _chatService,
+                await _chatService.GetMessagesByChatId(chatid, request)
             );
         }
 
@@ -36,14 +34,14 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetChatPinnedMessages(int chatid, [FromQuery] PaginationRequest request)
         {
             if (chatid <= 0) return BadRequest("Chat ID must be a positive integer");
-            if (await _chatRepository.GetChatsById(chatid) == null) return NotFound("Chat not found");
-            var totalCount = await _messageRepository.GetPinnedCountByChatAsync(chatid);
+            if (await _chatService.GetChatsById(chatid) == null) return NotFound("Chat not found");
+            var totalCount = await _chatService.GetPinnedCountByChatAsync(chatid);
             return await GetPagedData(
                 request,
                 10,
                 20,
-                _messageRepository,
-                await _messageRepository.GetMessagesByChatId(chatid, request.PageNumber, request.PageSize),
+                _chatService,
+                await _chatService.GetMessagesByChatId(chatid, request),
                 totalCount
             );
         }

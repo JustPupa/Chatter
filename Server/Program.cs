@@ -2,10 +2,9 @@ using Cozy_Chatter.Data;
 using Cozy_Chatter.Middleware;
 using Cozy_Chatter.Repositories;
 using Cozy_Chatter.Services;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -27,7 +26,6 @@ namespace Cozy_Chatter
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key")
                 ?? builder.Configuration["Jwt:Key"]
                 ?? throw new Exception("JWT Key not configured");
-
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -60,6 +58,10 @@ namespace Cozy_Chatter
             builder.Services.AddScoped<IProfilePictureRepository, ProfilePictureRepository>();
             builder.Services.AddScoped<ISMPostRepository ,SMPostRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddScoped<ISMPostService, SMPostService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddCors(option =>
             {

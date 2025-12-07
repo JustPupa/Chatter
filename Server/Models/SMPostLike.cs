@@ -3,7 +3,7 @@
 namespace Cozy_Chatter.Models
 {
     [Table("sm_post_likes")]
-    public class SMPostLike
+    public class SMPostLike : IEntity
     {
         [Column("user_id", Order = 1)]
         public int UserId { get; set; }

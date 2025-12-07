@@ -1,13 +1,12 @@
 ﻿using Cozy_Chatter.DTO;
-using Cozy_Chatter.Repositories;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class ChatController(IChatRepository chatRepository, IUserRepository userRepository) : AbstractController
+    public class ChatController(IChatService chatService) : AbstractController
     {
-        private readonly IChatRepository _chatRepository = chatRepository;
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IChatService _chatService = chatService;
 
         [HttpGet("{userid}/chats")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -17,13 +16,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetChatsByUser(int userid, [FromQuery] PaginationRequest request)
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
-            if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
+            if (await _chatService.GetUserById(userid) == null) return NotFound("User not found");
             return await GetPagedData(
                 request,
                 15,
                 100,
-                _chatRepository,
-                await _chatRepository.GetChatsByUserId(userid, request.PageNumber, request.PageSize)
+                _chatService,
+                await _chatService.GetChatsByUserId(userid, request)
             );
         }
 
@@ -34,13 +33,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetUsersByChat(int chatid, [FromQuery] PaginationRequest request)
         {
             if (chatid <= 0) return BadRequest("Chat ID must be a positive integer");
-            if (await _chatRepository.GetChatsById(chatid) == null) return NotFound("Chat not found");
+            if (await _chatService.GetChatsById(chatid) == null) return NotFound("Chat not found");
             return await GetPagedData(
                 request,
                 10,
                 30,
-                _chatRepository,
-                await _chatRepository.GetUsersByChatId(chatid, request.PageNumber, request.PageSize)
+                _chatService,
+                await _chatService.GetUsersByChatId(chatid, request)
             );
         }
     }

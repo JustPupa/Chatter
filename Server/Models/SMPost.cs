@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Cozy_Chatter.Models
 {
     [Table("sm_posts")]
-    public class SMPost
+    public class SMPost : IEntity
     {
         [Key]
         [Column("id")]

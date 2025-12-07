@@ -11,12 +11,7 @@ namespace Cozy_Chatter.Repositories
             return await _context.Emojis.CountAsync();
         }
 
-        public async Task<List<Emoji>> GetAllEmojis()
-        {
-            return await _context.Emojis.ToListAsync();
-        }
-
-        public async Task<List<Emoji>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<List<Emoji>> GetAllEmojis(int pageNumber, int pageSize)
         {
             return await _context.Emojis
                 .OrderBy(e => e.Id)
@@ -33,8 +28,7 @@ namespace Cozy_Chatter.Repositories
 
     public interface IEmojiRepository : IRepository
     {
-        Task<List<Emoji>> GetAllEmojis();
-        Task<List<Emoji>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<List<Emoji>> GetAllEmojis(int pageNumber, int pageSize);
         Task<List<UserReaction>> GetReactionsByPostId(int id);
     }
 }

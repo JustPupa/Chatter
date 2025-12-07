@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Cozy_Chatter.Models
 {
     [Table("credentials")]
-    public class Credential
+    public class Credential : IEntity
     {
         [Key]
         [Column("user_id")]

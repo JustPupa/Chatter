@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Cozy_Chatter.Models
 {
     [Table("chats")]
-    public class Chat
+    public class Chat : IEntity
     {
         [Key]
         [Column("id")]

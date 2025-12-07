@@ -24,6 +24,7 @@ namespace Cozy_Chatter.Repositories
                 .Select(s => s.FollowerId);
             return await _context.Users
                 .Where(u => subscribersIds.Contains(u.Id))
+                .OrderBy(u => u.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

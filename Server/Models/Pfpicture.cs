@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cozy_Chatter.Models
 {
     [Table("pfpics")]
-    public class Pfpicture
+    public class Pfpicture : IEntity
     {
         [Column("user_id", Order = 1)]
         public int UserId { get; set; }

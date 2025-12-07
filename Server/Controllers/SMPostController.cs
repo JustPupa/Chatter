@@ -1,20 +1,19 @@
 ﻿using Cozy_Chatter.DTO;
-using Cozy_Chatter.Repositories; 
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class SMPostController(ISMPostRepository postRepository, IUserRepository userRepository) : AbstractController
+    public class SMPostController(ISMPostService smPostService) : AbstractController
     {
-        private readonly ISMPostRepository _postRepository = postRepository;
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly ISMPostService _smPostService = smPostService;
 
         [HttpGet("latest")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetLatestPosts()
         {
-            var latestPosts = await _postRepository.GetDetailedLatestPosts();
+            var latestPosts = await _smPostService.GetDetailedLatestPosts();
             if (latestPosts.Count == 0) return NoContent();
             return Ok(latestPosts);
         }
@@ -27,13 +26,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetUserPosts(int userid, [FromQuery] PaginationRequest request)
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
-            if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
+            if (await _smPostService.GetUserById(userid) == null) return NotFound("User not found");
             return await GetPagedData(
                 request,
                 1,
                 50,
-                _postRepository,
-                await _postRepository.GetDetailedPostsByUserId(userid, request.PageNumber, request.PageSize)
+                _smPostService,
+                await _smPostService.GetDetailedPostsByUserId(userid, request)
             );
         }
 
@@ -45,13 +44,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetSMPostLikes(int postid, [FromQuery] PaginationRequest request)
         {
             if (postid <= 0) return BadRequest("Post ID must be a positive integer");
-            if (await _postRepository.GetPostById(postid) == null) return NotFound("Post not found");
+            if (await _smPostService.GetPostById(postid) == null) return NotFound("Post not found");
             return await GetPagedData(
                 request,
                 10,
                 50,
-                _postRepository,
-                await _postRepository.GetLikesByPostId(postid, request.PageNumber, request.PageSize)
+                _smPostService,
+                await _smPostService.GetLikesByPostId(postid, request)
             );
         }
     }

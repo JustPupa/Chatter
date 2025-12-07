@@ -1,5 +1,5 @@
 ﻿using Cozy_Chatter.Models;
-using Microsoft.Extensions.Configuration;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,13 +7,6 @@ using System.Text;
 
 namespace Cozy_Chatter.Services
 {
-    public interface ITokenService
-    {
-        public SymmetricSecurityKey GenerageKey();
-        public string GenerateAccessToken(User user);
-        public string GenerateRefreshToken(User user);
-        public ClaimsPrincipal? ValidateRefreshToken(string token);
-    }
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
@@ -24,7 +17,6 @@ namespace Cozy_Chatter.Services
             _configuration = configuration;
             _key = GenerageKey();
         }
-
         public SymmetricSecurityKey GenerageKey()
         {
             var jwtKey = _configuration["Jwt:Key"]
@@ -32,7 +24,6 @@ namespace Cozy_Chatter.Services
                  ?? throw new Exception("JWT Key not configured");
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
         }
-
         public string GenerateAccessToken(User user)
         {
             var claims = new[]
@@ -50,7 +41,6 @@ namespace Cozy_Chatter.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
         public string GenerateRefreshToken(User user)
         {
             var claims = new[] {
@@ -67,7 +57,6 @@ namespace Cozy_Chatter.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
         public ClaimsPrincipal? ValidateRefreshToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();

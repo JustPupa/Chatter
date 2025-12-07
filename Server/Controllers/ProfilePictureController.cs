@@ -1,14 +1,12 @@
 ﻿using Cozy_Chatter.DTO;
-using Cozy_Chatter.Repositories;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    public class ProfilePictureController(IProfilePictureRepository pfpRepository,
-        IUserRepository userRepository) : AbstractController
+    public class ProfilePictureController(IUserService userService) : AbstractController
     {
-        private readonly IProfilePictureRepository _pfpRepository = pfpRepository;
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserService _userService = userService;
 
         [HttpGet("{userid}/pfpictures")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -18,13 +16,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetUserPfps(int userid, [FromQuery] PaginationRequest request)
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
-            if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
+            if (await _userService.GetUserById(userid) == null) return NotFound("User not found");
             return await GetPagedData(
                 request,
                 1,
                 20,
-                _pfpRepository,
-                await _pfpRepository.GetProfilePicturesByUserId(userid, request.PageNumber, request.PageSize)
+                _userService,
+                await _userService.GetProfilePicturesByUserId(userid, request)
             );
         }
     }

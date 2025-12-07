@@ -1,16 +1,13 @@
 ﻿using Cozy_Chatter.DTO;
-using Cozy_Chatter.Repositories;
-using Microsoft.AspNetCore.Authorization;
+using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cozy_Chatter.Controllers
 {
-    [Authorize]
-    public class UserController(IUserRepository userRepository) : AbstractController
+    public class UserController(IUserService userService) : AbstractController
     {
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserService _userService = userService;
 
-        //Get subscribers by user
         [HttpGet("{userid}/subscribers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -19,13 +16,13 @@ namespace Cozy_Chatter.Controllers
         public async Task<IActionResult> GetSubscribersByUser(int userid, [FromQuery] PaginationRequest request)
         {
             if (userid <= 0) return BadRequest("User ID must be a positive integer");
-            if (await _userRepository.GetUserById(userid) == null) return NotFound("User not found");
+            if (await _userService.GetUserById(userid) == null) return NotFound("User not found");
             return await GetPagedData(
                 request,
                 30,
                 50,
-                _userRepository,
-                await _userRepository.GetSubscribersByUserId(userid, request.PageNumber, request.PageSize)
+                _userService,
+                await _userService.GetSubscribersByUser(userid, request)
             );
         }
     }

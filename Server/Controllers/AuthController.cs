@@ -1,5 +1,4 @@
-﻿using Cozy_Chatter.Repositories;
-using Cozy_Chatter.Services;
+﻿using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -7,17 +6,15 @@ namespace Cozy_Chatter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(ICredentialRepository credentialRepository,
-        ITokenService _tokenService, IUserRepository userRepository) : ControllerBase
+    public class AuthController(IUserService userService, ITokenService _tokenService) : ControllerBase
     {
-        private readonly ICredentialRepository _credentialRepository = credentialRepository;
+        private readonly IUserService _userService = userService;
         private readonly ITokenService _tokenService = _tokenService;
-        private readonly IUserRepository _userRepository = userRepository;
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await _credentialRepository.ValidateUserAsync(request.Login, request.Password);
+            var user = await _userService.ValidateUserAsync(request.Login, request.Password);
             if (user == null) return Unauthorized(new { message = "Invalid credentials" });
             var accessToken = _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken(user);
@@ -41,7 +38,7 @@ namespace Cozy_Chatter.Controllers
             if (principal == null) return Unauthorized();
             var userIdString = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdString == null || !int.TryParse(userIdString, out var userId)) return Unauthorized();
-            var user = await _userRepository.GetUserById(userId);
+            var user = await _userService.GetUserById(userId);
             if (user == null) return Unauthorized();
             var newAccess = _tokenService.GenerateAccessToken(user);
             var newRefresh = _tokenService.GenerateRefreshToken(user);

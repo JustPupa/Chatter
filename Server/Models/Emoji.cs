@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Cozy_Chatter.Models
 {
     [Table("emojis")]
-    public class Emoji
+    public class Emoji : IEntity
     {
         [Key]
         [Column("id")]

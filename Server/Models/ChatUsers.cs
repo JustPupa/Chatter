@@ -3,7 +3,7 @@
 namespace Cozy_Chatter.Models
 {
     [Table("chat_users")]
-    public class ChatUser
+    public class ChatUser : IEntity
     {
         [Column("chat_id", Order = 1)]
         public int ChatId { get; set; }
