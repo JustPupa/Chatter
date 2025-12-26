@@ -16,7 +16,7 @@ The application has Docker+Kubernetes support, so you don't need to manually run
 
 Description                               | Bash command
 ------------------------------------------|----------------------
-Switching to a directory with Kestrel     | cd <path-to-kestrel>/Chatter/Server
+Switching to a directory with Kestrel     | cd `<path-to-kestrel>`/Chatter/Server
 Publishing an application                 | dotnet publish -c Release -o ./bin/Release/net9.0/publish
 Building a Docker image                   | docker build -t chatter-kestrel .
 Update Deployment in Kubernetes           | kubectl set image deployment/chatter-server chatter-server=chatter-kestrel:latest
@@ -26,7 +26,7 @@ Check the Rollout status                  | kubectl rollout status deployment/ch
 
 Description                               | Bash command
 ------------------------------------------|----------------------
-Switching to a directory with React part  | cd <path-to-kestrel>/Chatter/Client
+Switching to a directory with React part  | cd `<path-to-kestrel>`/Chatter/Client
 Building an application                   | npm run build
 Building a Docker image                   | docker build -t chatter-client .
 Update Deployment in Kubernetes           | kubectl set image deployment/chatter-client chatter-client=chatter-client:latest
@@ -45,7 +45,7 @@ Viewing `K8S pods`                        | kubectl get pods
 Viewing `K8S services`                    | kubectl get svc
 Check `Kestrel logs`                      | kubectl logs deployment/chatter-server
 Check `React logs `                       | kubectl logs deployment/chatter-client
-Check the `logs of a specific Pod`        | kubectl logs pod/<pod-name> -c <container-name>
+Check the `logs of a specific Pod`        | kubectl logs pod/`<pod-name>` -c `<container-name>`
 
 ***
 Application files description
