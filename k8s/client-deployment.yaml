@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatter-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatter-client
+  template:
+    metadata:
+      labels:
+        app: chatter-client
+    spec:
+      containers:
+        - name: chatter-client
+          image: chatter-client
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

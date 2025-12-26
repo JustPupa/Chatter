@@ -17,3 +17,4 @@ Client/**/dist
 .env.production.local
 
 **/npm-debug.log*
+/k8s/kestrel-secrets.yaml

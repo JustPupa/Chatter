@@ -68,7 +68,7 @@ namespace Cozy_Chatter
                 option.AddPolicy("AllowClient", builder =>
                 {
                     builder
-                        .WithOrigins("http://localhost:5173")
+                        .WithOrigins("http://localhost:30080")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();

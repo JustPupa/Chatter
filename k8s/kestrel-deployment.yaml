@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatter-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatter-server
+  template:
+    metadata:
+      labels:
+        app: chatter-server
+    spec:
+      containers:
+        - name: chatter-server
+          image: chatter-kestrel
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5194
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:5194
+          envFrom:
+            - secretRef:
+                name: kestrel-secrets

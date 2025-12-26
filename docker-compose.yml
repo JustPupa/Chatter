@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    image: chatter-kestrel
+    ports:
+      - "5194:5194"
+    environment:
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      Jwt__Key: ${Jwt__Key}
+      PG_CONNECTION_STRING: ${PG_CONNECTION_STRING}
+
+  frontend:
+    build:
+      context: ./Client
+    image: chatter-client
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

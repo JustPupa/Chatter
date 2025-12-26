@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatter-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          # Client (React)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chatter-client
+                port:
+                  number: 80
+          # ASP.NET (Kestrel)
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: chatter-server
+                port:
+                  number: 5194
