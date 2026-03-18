@@ -5,7 +5,7 @@ using System.Security.Claims;
 namespace Cozy_Chatter.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     public class AuthController(IUserService userService, ITokenService _tokenService) : ControllerBase
     {
         private readonly IUserService _userService = userService;
@@ -26,7 +26,8 @@ namespace Cozy_Chatter.Controllers
                 Expires = DateTime.UtcNow.AddDays(7)
             });
             return Ok(new {
-                accessToken
+                accessToken,
+                user.Id
             });
         }
 

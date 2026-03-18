@@ -1,5 +1,72 @@
 import { api } from "./api";
 
+export const loadUser = async (setUser) => {
+    try {
+      const response = await api.get("/user/account", {
+        withCredentials: true
+      });
+      setUser(response.data);
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export const logout = async () => {
+    try {
+      if (!window.confirm("Do you really want to logout?")) return;
+      const response = await api.post("/auth/logout", {
+        withCredentials: true
+      });
+      localStorage.removeItem("accessToken");
+      window.location.href = "/login";
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export const getUserChats = async (pageNum, pageSize) => {
+    try {
+      const response = await api.get("/Chat/My", {
+        params: {
+            pageNumber: pageNum,
+            pageSize: pageSize
+        },
+        withCredentials: true
+      });
+      return response.data;
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export const getUserFeed = async (pageNum, pageSize) => {
+    try {
+      const response = await api.get("/SMPost/latest", {
+        withCredentials: true
+      });
+      return response.data;
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+//OBSOLETE
+export const getChatsByUserId = async (userid, chatsPage, chatsCount) => {
+    try {
+        const response = await api.get(`/Chat/${userid}/chats`, {
+            params: {
+                pageNumber: chatsPage,
+                pageSize: chatsCount
+            }
+        });
+        console.log("User chats:");
+        console.log(response.data);
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+//OBSOLETE
 export const getLatestPosts = async () => {
     try {
         const response = await api.get("/SMPost/latest");
@@ -94,21 +161,6 @@ export const getPfpicsByUserId = async (userid, pfpPage, pfpCount) => {
             }
         });
         console.log("User profile pictures links:");
-        console.log(response.data);
-    } catch(e) {
-        console.error(e);
-    }
-}
-
-export const getChatsByUserId = async (userid, chatsPage, chatsCount) => {
-    try {
-        const response = await api.get(`/Chat/${userid}/chats`, {
-            params: {
-                pageNumber: chatsPage,
-                pageSize: chatsCount
-            }
-        });
-        console.log("User chats:");
         console.log(response.data);
     } catch(e) {
         console.error(e);

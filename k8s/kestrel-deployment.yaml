@@ -2,25 +2,46 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chatter-server
+  namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: chatter-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: chatter-server
     spec:
       containers:
-        - name: chatter-server
-          image: chatter-kestrel
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 5194
-          env:
-            - name: ASPNETCORE_URLS
-              value: http://+:5194
-          envFrom:
-            - secretRef:
-                name: kestrel-secrets
+      - name: chatter-server
+        image: gcr.io/cozy-chatter/chatter-kestrel:1.0.2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5194
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://+:5194
+        envFrom:
+        - secretRef:
+            name: kestrel-secrets
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5194
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 3
+        volumeMounts:
+        - name: dataprotect
+          mountPath: /root/.aspnet/DataProtection-Keys
+      volumes:
+      - name: dataprotect
+        persistentVolumeClaim:
+          claimName: dataprotect-pvc

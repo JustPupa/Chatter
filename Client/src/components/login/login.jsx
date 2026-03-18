@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth";
 
-const Login = () => {
+function Login () {
   const navigate = useNavigate();
 
   const [userlogin, setUserlogin] = useState("");
@@ -16,8 +16,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(userlogin, password);
-      navigate("/test");
+      const logindata = await login(userlogin, password);
+      navigate("/user/account");
     } catch (err) {
       console.error(err);
       setError("Invalid credentials");

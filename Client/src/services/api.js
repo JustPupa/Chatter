@@ -12,7 +12,8 @@ export function getAccessToken() {
 }
 
 export const api = axios.create({
-    baseURL: "http://localhost:31994/api",
+    //baseURL: "/api",
+    baseURL: "http://localhost:5194/api",
     withCredentials: true
 });
 

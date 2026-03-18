@@ -8,6 +8,7 @@ namespace Cozy_Chatter.Controllers
     {
         private readonly ISMPostService _smPostService = smPostService;
 
+        //Feed is not personalized yet
         [HttpGet("latest")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

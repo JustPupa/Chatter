@@ -68,7 +68,9 @@ namespace Cozy_Chatter
                 option.AddPolicy("AllowClient", builder =>
                 {
                     builder
-                        .WithOrigins("http://localhost:30080")
+                        //.WithOrigins("http://34.160.144.159")
+                        //.WithOrigins("http://localhost:8080")
+                        .WithOrigins("http://localhost:5173")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -76,6 +78,7 @@ namespace Cozy_Chatter
             });
 
             builder.Services.AddOpenApi();
+            builder.WebHost.UseUrls("http://0.0.0.0:5194");
 
             var app = builder.Build();
 
@@ -88,7 +91,10 @@ namespace Cozy_Chatter
             }
             else app.UseExceptionHandler("/error");
 
-            app.UseHttpsRedirection();
+            //only for Docker use
+            //app.UseHttpsRedirection();
+
+            app.MapGet("/health", () => Results.Ok("OK"));
 
             app.UseCors("AllowClient");
 

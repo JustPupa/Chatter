@@ -1,6 +1,7 @@
 ﻿using Cozy_Chatter.DTO;
 using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Cozy_Chatter.Controllers
 {
@@ -24,6 +25,18 @@ namespace Cozy_Chatter.Controllers
                 _userService,
                 await _userService.GetSubscribersByUser(userid, request)
             );
+        }
+
+        [HttpGet("account")]
+        public IActionResult GetAccount()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized();
+            return Ok(new
+            {
+                id = userId,
+                login = User.Identity?.Name
+            });
         }
     }
 }

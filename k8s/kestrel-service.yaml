@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: chatter-server
 spec:
-  type: NodePort
   selector:
     app: chatter-server
   ports:
-    - port: 5194
+    - name: http
+      port: 5194
       targetPort: 5194
-      nodePort: 31994
+  type: ClusterIP

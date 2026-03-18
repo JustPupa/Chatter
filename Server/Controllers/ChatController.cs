@@ -1,12 +1,29 @@
 ﻿using Cozy_Chatter.DTO;
 using Cozy_Chatter.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Cozy_Chatter.Controllers
 {
     public class ChatController(IChatService chatService) : AbstractController
     {
         private readonly IChatService _chatService = chatService;
+
+        [HttpGet("My")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUserChats([FromQuery] PaginationRequest request)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
+            return await GetPagedData(
+                request,
+                15,
+                100,
+                _chatService,
+                await _chatService.GetChatsByUserId(userId, request)
+            );
+        }
 
         [HttpGet("{userid}/chats")]
         [ProducesResponseType(StatusCodes.Status200OK)]

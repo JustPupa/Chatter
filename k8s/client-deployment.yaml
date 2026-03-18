@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: chatter-client
-          image: chatter-client
+          image: gcr.io/cozy-chatter/chatter-client:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
