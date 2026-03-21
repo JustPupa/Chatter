@@ -1,31 +1,30 @@
-import React from "react";
 import { useEffect, useState } from "react";
+import { Outlet, NavLink } from "react-router-dom";
 import { getUserChats } from '../../services/requests';
 
-function Chats() {
+function ChatList() {
     const [chats, setChats] = useState([]);
 
     useEffect(() => {
     const loadChats = async () => {
       const chatsData = await getUserChats(1, 15);
-      console.log(chatsData);
       setChats(chatsData.data);
     };
     loadChats();
   }, []);
 
   return (
-    <div>
-      <span className="fixed top-5 left-5 flex items-center justify-center gap-[0.5vw] p-[0.5vw] rounded-md transition-all">
-        My Chats
-      </span>
+    <>
+    <div className="flex flex-col items-start">
       {chats.map(chat => (
-        <div key={chat.id}>
+        <NavLink key={chat.id} to={`/user/chats/${chat.id}`} className="flex bg-white text-black rounded-md px-3 py-1 cursor-pointer hover:bg-gray-200 !text-black">
           {chat.name}
-        </div>
+        </NavLink>
       ))}
     </div>
+    <div><Outlet /></div>
+    </>
   )
 }
 
-export default Chats;
+export default ChatList;

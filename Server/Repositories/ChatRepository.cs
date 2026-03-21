@@ -12,7 +12,7 @@ namespace Cozy_Chatter.Repositories
         }
         public async Task<Chat?> GetChatsById(int id)
         {
-            return await _context.Chats.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Chats.Include(ch => ch.ChatUsers).FirstOrDefaultAsync(c => c.Id == id);
         }
         public async Task<List<Chat>> GetChatsByUserId(int userId, int pageNumber, int pageSize)
         {

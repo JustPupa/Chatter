@@ -12,7 +12,7 @@ import {
   getUsersByChatId,
   getMessagesByChatId,
   getPinnedMessagesByChatId
-} from '../../services/requests';
+} from '../../services/test-requests';
 
 function Test() {
   const [userIdForPosts, setUserIdForPosts] = useState(1);
