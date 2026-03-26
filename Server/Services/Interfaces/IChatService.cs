@@ -6,6 +6,7 @@ namespace Cozy_Chatter.Services.Interfaces
     public interface IChatService : IService
     {
         Task<User?> GetUserById(int id);
+        Task<int> AddMessageAsync(Message message);
         Task<Chat?> GetChatsById(int id);
         Task<List<Chat>> GetChatsByUserId(int userId, PaginationRequest request);
         Task<List<User>> GetUsersByChatId(int chatId, PaginationRequest request);

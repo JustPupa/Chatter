@@ -8,7 +8,7 @@ namespace Cozy_Chatter.Models
     {
         [Key]
         [Column("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Column("chat_id")]
         public int ChatId { get; set; }
         [Column("user_id")]
@@ -18,7 +18,7 @@ namespace Cozy_Chatter.Models
         [Column("time_stamp")]
         public DateTime TimeStamp { get; set; }
         [Column("message_ref_id")]
-        public int? MessageReferenceId { get; set; }
+        public Guid? MessageReferenceId { get; set; }
         [Column("is_public")]
         public bool? IsPublic { get; set; }
         [Column("media_id")]

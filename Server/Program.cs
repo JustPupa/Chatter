@@ -3,6 +3,7 @@ using Cozy_Chatter.Middleware;
 using Cozy_Chatter.Repositories;
 using Cozy_Chatter.Services;
 using Cozy_Chatter.Services.Interfaces;
+using Cozy_Chatter.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -62,6 +63,7 @@ namespace Cozy_Chatter
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<ISMPostService, SMPostService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSignalR();
 
             builder.Services.AddCors(option =>
             {
@@ -70,7 +72,7 @@ namespace Cozy_Chatter
                     builder
                         //.WithOrigins("http://34.160.144.159")
                         //.WithOrigins("http://localhost:8080")
-                        .WithOrigins("http://localhost:5173")
+                        .WithOrigins("http://localhost:5173", "http://192.168.100.5:5173")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -94,6 +96,7 @@ namespace Cozy_Chatter
             //only for Docker use
             //app.UseHttpsRedirection();
 
+            app.MapHub<ChatHub>("/chatHub");
             app.MapGet("/health", () => Results.Ok("OK"));
 
             app.UseCors("AllowClient");

@@ -6,7 +6,7 @@ namespace Cozy_Chatter.Models
     public class MessagePin : IEntity
     {
         [Column("message_id", Order = 1)]
-        public int MessageId { get; set; }
+        public Guid MessageId { get; set; }
         [Column("user_id", Order = 2)]
         public int UserId { get; set; }
     }

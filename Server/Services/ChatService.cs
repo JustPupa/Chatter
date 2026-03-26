@@ -2,6 +2,8 @@
 using Cozy_Chatter.Models;
 using Cozy_Chatter.Repositories;
 using Cozy_Chatter.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Cozy_Chatter.Services
 {
@@ -45,6 +47,13 @@ namespace Cozy_Chatter.Services
         public async Task<int> GetPinnedCountByChatAsync(int chatid)
         {
             return await _messageRepository.GetPinnedCountByChatAsync(chatid);
+        }
+
+        public async Task<int> AddMessageAsync(Message message)
+        {
+            var isMember = await _userRepository.GetUserByIdAndChatAsync(message.UserId, message.ChatId);
+            if (!isMember) throw new Exception("Access denied");
+            return await _messageRepository.AddAsync(message);
         }
     }
 }

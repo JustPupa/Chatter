@@ -1,5 +1,7 @@
 ﻿using Cozy_Chatter.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Reflection.Emit;
 
 namespace Cozy_Chatter.Data
 {
@@ -21,6 +23,22 @@ namespace Cozy_Chatter.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            var utcConverter = new ValueConverter<DateTime, DateTime>(
+                toDb => toDb.Kind == DateTimeKind.Utc ? toDb : toDb.ToUniversalTime(),
+                fromDb => DateTime.SpecifyKind(fromDb, DateTimeKind.Utc)
+            );
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(utcConverter);
+                    }
+                }
+            }
+
             builder.Entity<AllowedEmoji>().HasKey(emj => new { emj.PostId, emj.EmojiId });
             builder.Entity<ChatUser>().HasKey(ch => new { ch.ChatId, ch.UserId });
             builder.Entity<MessagePin>().HasKey(mes => new { mes.MessageId, mes.UserId });

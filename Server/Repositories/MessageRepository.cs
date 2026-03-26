@@ -11,6 +11,13 @@ namespace Cozy_Chatter.Repositories
             return await _context.Messages.CountAsync();
         }
 
+        public async Task<int> AddAsync(Message message)
+        {
+            _context.Messages.Add(message);
+            var result = await _context.SaveChangesAsync();
+            return result;
+        }
+
         public async Task<int> GetCountByChatAsync(int chatid)
         {
             return await _context.Messages
@@ -29,7 +36,7 @@ namespace Cozy_Chatter.Repositories
         {
             return await _context.Messages
                 .Where(m => m.ChatId == id)
-                .OrderByDescending(m => m.TimeStamp)
+                .OrderBy(m => m.TimeStamp)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -49,6 +56,7 @@ namespace Cozy_Chatter.Repositories
     public interface IMessageRepository : IRepository
     {
         Task<int> GetCountByChatAsync(int chatid);
+        Task<int> AddAsync(Message message);
         Task<int> GetPinnedCountByChatAsync(int chatid);
         Task<List<Message>> GetMessagesByChatId(int id, int pageNumber, int pageSize);
         Task<List<Message>> GetChatPinnedMessages(int chatId, int pageNumber, int pageSize);
